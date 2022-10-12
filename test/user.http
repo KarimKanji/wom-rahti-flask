@@ -6,13 +6,23 @@ GET {{baseUrl}}
 
 ###
 
-GET {{baseUrl}}/test-route
+GET {{baseUrl}}/users
+Content-Type: application/json
 
 ###
 
-POST {{baseUrl}}/test-route
+POST {{baseUrl}}/
 Content-Type: application/json
 
 { 
     "testkey": "Test value"
+}
+
+###
+
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{ 
+    "email": "kunkainsadasdsaki@arcada.fi"
 }

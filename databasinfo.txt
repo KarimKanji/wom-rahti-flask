@@ -1,0 +1,12 @@
+Database host:
+128.214.253.167
+Database name:
+mtvgqzrc
+Database user:
+mtvgqzrc
+Database password:
+35086793d70f8b3c0fa9
+Connection port:
+5432
+Connection URI:
+postgresql://mtvgqzrc:35086793d70f8b3c0fa9@128.214.253.167:5432/mtvgqzrc
