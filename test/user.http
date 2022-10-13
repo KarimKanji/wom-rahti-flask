@@ -24,5 +24,5 @@ POST {{baseUrl}}/users
 Content-Type: application/json
 
 { 
-    "email": "kunkainsadasdsaki@arcada.fi"
+    "email": "ndsadasdasaasdasdsasdasddsasdasdaki@arcada.fi"
 }

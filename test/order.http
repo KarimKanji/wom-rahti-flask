@@ -1,0 +1,43 @@
+
+@baseUrl=http://127.0.0.1:5000
+
+###
+
+GET {{baseUrl}}/orders
+Content-Type: application/json
+
+###
+
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{ 
+    "date": "2022-11-02",
+    "service_id": "fc227e2b-1cca-4asd034-ba2b-e9aaa72b2eaf",
+    "location": "kunkainsdadasdsaasdki@arcada.fi",
+    "service": "Damsugning"
+}
+
+###
+
+DELETE {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+    "id": "97ccfb5a-99b7-432b-be28-6537917877f6"
+}
+
+###
+
+PATCH {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+
+    "id": "a1d2f1a0-1c80-457c-8773-e8b4859d7f6e",
+    "date": "2022-11-03", 
+    "location": "tanantestissa uusi mesta",
+    "service": "jess"
+
+}
+

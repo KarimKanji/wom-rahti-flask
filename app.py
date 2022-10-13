@@ -1,8 +1,7 @@
 from crypt import methods
 from enum import unique
-import os
+import os, requests, uuid
 from turtle import update
-import uuid
 from flask import Flask, request
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
@@ -36,104 +35,135 @@ class Service(db.Model):
         onupdate=db.func.now())
 
 
-# class Order(db.Model):
-#     id = db.Column(db.String, primary_key=True)
-#     service_id = db.Column(db.String, primary_key=True)
-#     location = db.Column(db.String)
-#     services = db.Column(db.String)
-#     created_at = db.Column(db.DateTime, default= db.func.now())
-#     updated_at = db.Column(db.DateTime,
-#         default= db.func.now(),
-#         onupdate=db.func.now())
+class Order(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    service_id = db.Column(db.String, primary_key=True)
+    date = db.Column(db.DateTime)
+    location = db.Column(db.String)
+    services = db.Column(db.String)
+    created_at = db.Column(db.DateTime, default= db.func.now())
+    updated_at = db.Column(db.DateTime,
+        default= db.func.now(),
+        onupdate=db.func.now())
 
 
 
 # with app.app_context():
 #         db.create_all()
 
+@app.route("/cabins", methods=['GET'])
+def cabins():
+    if request.method == 'GET':
+        cabins = requests.get('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/cabins/owned', headers = {"Authorization": "Bearer " + os.environ.get('JWT_TOKEN')} )
+        return cabins.json()
+
 @app.route("/services", methods=['POST' , 'GET', 'PATCH', 'DELETE'])
 def services():
-    if request.method == 'GET':
-        services = []
-        for service in Service.query.all():
-            services.append({
-            'id': service.id,
-            'location': service.location,
-            'services': service.services,
-            'created_at': service.created_at,
-            'updated_at': service.updated_at
-            })
+    try:
+        if request.method == 'GET':
+            services = []
+            for service in Service.query.all():
+                services.append({
+                'id': service.id,
+                'location': service.location,
+                'services': service.services,
+                'created_at': service.created_at,
+                'updated_at': service.updated_at
+                })
 
             return services
 
+        if request.method == 'POST':
+
+            body = request.get_json()
+
+            new_service = Service(
+                id = str(uuid.uuid4()),
+                location = body['location'],
+                services = body['service']
+                )
+
+            db.session.add(new_service)
+            db.session.commit()
+
+            return {'msg': 'Service created', 'id': new_service.id}
+
+        if request.method == 'DELETE':      
+            body = request.get_json()
+            Service.query.filter_by(id = body['id']).delete()
+        
+            db.session.commit()
+
+            return {'msg': 'Service deleted', 'id': body['id']}
+
+        if request.method == 'PATCH': 
+            body = request.get_json()
+            
+            service = Service.query.filter_by(id = body['id']).first()
+
+            service.location = body['location'],
+            service.services = body['service']
+
+            db.session.commit()
+
+            return {'msg': 'Service updated', 'location': body['location']}
+
+    except: return {'msg': "Pass"}
+
+@app.route("/orders", methods=['GET', 'POST', 'PATCH', 'DELETE'])
+def orders():
+    if request.method == 'GET':
+        orders = []
+        for order in Order.query.all():
+            orders.append({
+                'id:': order.id,
+                'date': order.date,
+                'service_id': order.service_id,
+                'location': order.location,
+                'services': order.services,
+                'created_at': order.created_at,
+                'updated_at': order.updated_at
+                })
+        return orders
+
     if request.method == 'POST':
+
 
         body = request.get_json()
 
-        new_service = Service(
+        new_order = Order(
             id = str(uuid.uuid4()),
+            service_id = body['service_id'],
+            date = body['date'],
             location = body['location'],
             services = body['service']
             )
 
-        db.session.add(new_service)
+        db.session.add(new_order)
         db.session.commit()
 
-        return {'msg': 'Service created', 'id': new_service.id}
+        return {'msg': 'Order created', 'id': new_order.id}
 
-    if request.method == 'DELETE':      
+    if request.method == 'DELETE':
         body = request.get_json()
-        Service.query.filter_by(id = body['id']).delete()
-    
+        Order.query.filter_by(id = body['id']).delete()
+
         db.session.commit()
 
-        return {'msg': 'Service deleted', 'id': body['id']}
+        return {'msg': 'Order deleted', 'id': body['id']}
 
     if request.method == 'PATCH': 
         body = request.get_json()
         
-        service = Service.query.filter_by(id = body['id']).first()
+        order = Order.query.filter_by(id = body['id']).first()
 
-        service.location = body['location'],
-        service.services = body['service']
+        order.date = body['date'],
+        order.location = body['location'],
+        order.services = body['service']
 
         db.session.commit()
 
-        return {'msg': 'Service updated', 'location': body['location']}
-
-
-
-# @app.route("/orders", methods=['POST', 'GET'])
-# def orders():
-#     if request.method == 'GET':
-#         orders = []
-#         for order in Order.query.all():
-#             orders.append({
-#                 'id:': order.id,
-#                 'service_id': order.service_id,
-#                 'location': order.location,
-#                 'services': order.services,
-#                 'created_at': order.created_at,
-#                 'updated_at': order.updated_at
-#             })
-
-#     if request.method == 'POST':
-
-
-#         body = request.get_json()
-
-#         new_order = Order(
-#             id = str(uuid.uuid4()),
-#             location = body['location'],
-#             services = body['service']
-#             )
-
-#         db.session.add(new_order)
-#         db.session.commit()
-
-#         return {'msg': 'Service created', 'id': new_order.id}
-
-        
+        return {'msg': 'Order updated'}
 
 
 
