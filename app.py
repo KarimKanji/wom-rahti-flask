@@ -1,7 +1,6 @@
 from crypt import methods
 from enum import unique
 import os, requests, uuid
-from turtle import update
 from flask import Flask, request
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
