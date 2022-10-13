@@ -1,6 +1,6 @@
 # For use with the Rest Client VSCode extension (humao.rest-client)
 
-@baseUrl=http://127.0.0.1:5000
+@baseUrl=https://flask-test-kanjikar.rahtiapp.fi/
 
 GET {{baseUrl}}
 
