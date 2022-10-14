@@ -192,7 +192,7 @@ def users():
         body = request.get_json()
         users = requests.post('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/users/login', json = {'email': body['email'], 'password': body['password']})
         print(users.json())
-        return users.json()['token']
+        return users.json()
 
 # @app.route("/users", methods=['GET', 'POST'])
 # def users():
