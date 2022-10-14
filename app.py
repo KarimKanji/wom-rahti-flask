@@ -189,13 +189,11 @@ def index():
 @app.route("/users/login", methods=['POST'])
 def users():
     if request.method == 'POST':
+        data = request.get_json()
         print("hejssan")
-        users = requests.post('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/users/login', json = {'email': 'data.email', 'password': 'data.password'})
-        
-        return {
-            users.json()
-            
-        }
+        users = requests.post('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/users/login', json = {'email': data.email, 'password': data.password})
+        print(users.json())
+        return users
 
 # @app.route("/users", methods=['GET', 'POST'])
 # def users():
