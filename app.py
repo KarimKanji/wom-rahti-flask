@@ -1,7 +1,8 @@
 from crypt import methods
 from enum import unique
-from turtle import update
-import os, requests, uuid
+import os
+import requests
+import uuid
 from flask import Flask, request
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy

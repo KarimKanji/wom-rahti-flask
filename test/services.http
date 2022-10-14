@@ -1,6 +1,6 @@
 
 
-@baseUrl=https://flask-test-kanjikar.rahtiapp.fi/
+@baseUrl=http://127.0.0.1:5000
 
 ###
 
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 {
     "id": "99d5eeea-1ddb-4300-a895-e8c20dd455e1",
-    "location": "tanantestissa uusi mestaasdasd",
+    "location": "tanantestissa uusi mestaasdaasdasdsd",
     "service": "1123"
 
 }
