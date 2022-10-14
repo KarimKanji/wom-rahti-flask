@@ -186,26 +186,37 @@ def index():
             'request_body': body
         }
 
-@app.route("/users", methods=['GET', 'POST'])
+@app.route("/users/login", methods=['POST'])
 def users():
-    if request.method == 'GET':
-        users = []
-        for user in User.query.all():
-            users.append({
-            'id': user.id,
-            'email': user.email,
-            'created_at': user.created_at,
-            'updated_at': user.updated_at
-            })
-        return users
-    
     if request.method == 'POST':
-        body = request.get_json()
-        new_user = User(email = body['email'], id = str(uuid.uuid4()))
-        db.session.add(new_user)
-        db.session.commit()
+        print("hejssan")
+        users = requests.post('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/users/login', json = {'email': 'data.email', 'password': 'data.password'})
+        
+        return {
+            users.json()
+            
+        }
 
-        return {'msg': 'User created', 'id': new_user.id}
+# @app.route("/users", methods=['GET', 'POST'])
+# def users():
+#     if request.method == 'GET':
+#         users = []
+#         for user in User.query.all():
+#             users.append({
+#             'id': user.id,
+#             'email': user.email,
+#             'created_at': user.created_at,
+#             'updated_at': user.updated_at
+#          })
+#       return users
+    
+#     if request.method == 'POST':
+#         body = request.get_json()
+#         new_user = User(email = body['email'], id = str(uuid.uuid4()))
+#         db.session.add(new_user)
+#         db.session.commit()
+
+#         return {'msg': 'User created', 'id': new_user.id}
 
 
 if __name__ == "__main__":
