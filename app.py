@@ -191,6 +191,7 @@ def users():
     if request.method == 'POST':
         data = request.get_json()
         print("hejssan")
+        print(data.email, data.password)
         users = requests.post('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/users/login', json = {'email': data.email, 'password': data.password})
         print(users.json())
         return users
