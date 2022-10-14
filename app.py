@@ -1,6 +1,7 @@
 from crypt import methods
 from enum import unique
 import os
+from urllib import response
 import requests
 import uuid
 from flask import Flask, request
@@ -52,10 +53,11 @@ class Order(db.Model):
 # with app.app_context():
 #         db.create_all()
 
-@app.route("/cabins", methods=['GET'])
+@app.route("/cabins/owned", methods=['GET'])
 def cabins():
     if request.method == 'GET':
-        cabins = requests.get('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/cabins/owned', headers = {"Authorization": "Bearer " + os.environ.get('JWT_TOKEN')} )
+        
+        cabins = requests.get('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/cabins/owned', headers=request['Authorization'])
         return cabins.json()
 
 @app.route("/services", methods=['POST' , 'GET', 'PATCH', 'DELETE'])
