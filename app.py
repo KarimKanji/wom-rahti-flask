@@ -56,8 +56,7 @@ class Order(db.Model):
 @app.route("/cabins/owned", methods=['GET'])
 def cabins():
     if request.method == 'GET':
-        
-        cabins = requests.get('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/cabins/owned', request.headers['Authorization'])
+        cabins = requests.get('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/cabins/owned', header= {"Authorization" :request.headers['Authorization'] })
         return cabins.json()
 
 @app.route("/services", methods=['POST' , 'GET', 'PATCH', 'DELETE'])
