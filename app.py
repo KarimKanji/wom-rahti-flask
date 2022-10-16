@@ -41,7 +41,7 @@ class Service(db.Model):
 class Order(db.Model):
     id = db.Column(db.String, primary_key=True)
     service_id = db.Column(db.String, primary_key=True)
-    date = db.Column(db.DateTime)
+    date = db.Column(db.DateTime.date())
     location = db.Column(db.String)
     services = db.Column(db.String)
     created_at = db.Column(db.DateTime, default= db.func.now())
@@ -51,8 +51,8 @@ class Order(db.Model):
 
 
 
-# with app.app_context():
-#         db.create_all()
+with app.app_context():
+        db.create_all()
 
 @app.route("/cabins/owned", methods=['GET'])
 def cabins():
