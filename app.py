@@ -1,4 +1,5 @@
 from crypt import methods
+from datetime import datetime
 from enum import unique
 import os
 from urllib import response
@@ -8,7 +9,7 @@ import uuid
 from flask import Flask, request
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
-
+import datetime
 load_dotenv()
 
 app = Flask(__name__)
@@ -41,7 +42,7 @@ class Service(db.Model):
 class Order(db.Model):
     id = db.Column(db.String, primary_key=True)
     service_id = db.Column(db.String, primary_key=True)
-    date = db.Column(db.DateTime.date())
+    date = db.Column(db.DateTime, default=datetime.utcnow)
     location = db.Column(db.String)
     services = db.Column(db.String)
     created_at = db.Column(db.DateTime, default= db.func.now())
