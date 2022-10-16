@@ -15,5 +15,5 @@
 - To run you app over SSL (https) just enable it in you Route (Applications/Routes) by enabling "Secure Route" (you can also set "Insecure Traffic" to _redirect_ or _allow_)
 - The `.devcontainer` folder is a VSCode thing, not needed for Rahti. 
 
-
+INLÄMNING AV PROJEKT 2 16-10-2022
 
