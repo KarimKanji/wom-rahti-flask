@@ -51,8 +51,8 @@ class Order(db.Model):
 
 
 
-with app.app_context():
-        db.create_all()
+# with app.app_context():
+#         db.create_all()
 
 @app.route("/cabins/owned", methods=['GET'])
 def cabins():
@@ -119,7 +119,7 @@ def orders():
         orders = []
         for order in Order.query.all():
             orders.append({
-                'id:': order.id,
+                'id': order.id,
                 'date': order.date,
                 'service_id': order.service_id,
                 'location': order.location,
