@@ -62,139 +62,153 @@ def cabins():
 
 @app.route("/services", methods=['POST' , 'GET', 'PATCH', 'DELETE'])
 def services():
-    try:
-        if request.method == 'GET':
-            services = []
-            for service in Service.query.all():
-                services.append({
-                'id': service.id,
-                'location': service.location,
-                'services': service.services,
-                'created_at': service.created_at,
-                'updated_at': service.updated_at
-                })
 
-            return services
+        if request.method == 'GET':
+            try:
+                services = []
+                for service in Service.query.all():
+                    services.append({
+                    'id': service.id,
+                    'location': service.location,
+                    'services': service.services,
+                    'created_at': service.created_at,
+                    'updated_at': service.updated_at
+                    })
+
+                return services
+            except: return {'msg': "Pass"}
 
         if request.method == 'POST':
+            try:    
+                body = request.get_json()
 
-            body = request.get_json()
+                new_service = Service(
+                    id = str(uuid.uuid4()),
+                    location = body['location'],
+                    services = body['service']
+                    )
 
-            new_service = Service(
-                id = str(uuid.uuid4()),
-                location = body['location'],
-                services = body['service']
-                )
+                db.session.add(new_service)
+                db.session.commit()
 
-            db.session.add(new_service)
-            db.session.commit()
+                return {'msg': 'Service created', 'id': new_service.id}
+            except: return {'msg': "Pass"}
 
-            return {'msg': 'Service created', 'id': new_service.id}
+        if request.method == 'DELETE':
+            try:        
+                body = request.get_json()
+                Service.query.filter_by(id = body['id']).delete()
+            
+                db.session.commit()
 
-        if request.method == 'DELETE':      
-            body = request.get_json()
-            Service.query.filter_by(id = body['id']).delete()
-        
-            db.session.commit()
-
-            return {'msg': 'Service deleted', 'id': body['id']}
+                return {'msg': 'Service deleted', 'id': body['id']}
+            except: return {'msg': "Pass"}
 
         if request.method == 'PATCH': 
-            body = request.get_json()
-            
-            service = Service.query.filter_by(id = body['id']).first()
+            try: 
+                body = request.get_json()
+                service = Service.query.filter_by(id = body['id']).first()
+                service.location = body['location'],
+                service.services = body['service']
+                db.session.commit()
+                return {'msg': 'Service updated', 'location': body['location']}
+            except: return {'msg': "Pass"}
 
-            service.location = body['location'],
-            service.services = body['service']
-
-            db.session.commit()
-
-            return {'msg': 'Service updated', 'location': body['location']}
-
-    except: return {'msg': "Pass"}
+   
 
 @app.route("/orders", methods=['GET', 'POST', 'PATCH', 'DELETE'])
 def orders():
     if request.method == 'GET':
-        orders = []
-        for order in Order.query.all():
-            orders.append({
-                'id': order.id,
-                'date': order.date,
-                'service_id': order.service_id,
-                'location': order.location,
-                'services': order.services,
-                'created_at': order.created_at,
-                'updated_at': order.updated_at
-                })
-        return orders
+        try: 
+            orders = []
+            for order in Order.query.all():
+                orders.append({
+                    'id': order.id,
+                    'date': order.date,
+                    'service_id': order.service_id,
+                    'location': order.location,
+                    'services': order.services,
+                    'created_at': order.created_at,
+                    'updated_at': order.updated_at
+                    })
+            return orders
+        except: return {'msg': "Pass"}
 
     if request.method == 'POST':
+        try: 
+            body = request.get_json()
+            new_order = Order(
+                id = str(uuid.uuid4()),
+                service_id = body['service_id'],
+                date = body['date'],
+                location = body['location'],
+                services = body['service']
+                )
 
+            db.session.add(new_order)
+            db.session.commit()
 
-        body = request.get_json()
-
-        new_order = Order(
-            id = str(uuid.uuid4()),
-            service_id = body['service_id'],
-            date = body['date'],
-            location = body['location'],
-            services = body['service']
-            )
-
-        db.session.add(new_order)
-        db.session.commit()
-
-        return {'msg': 'Order created', 'id': new_order.id}
+            return {'msg': 'Order created', 'id': new_order.id}
+        except: return {'msg': "Pass"}
 
     if request.method == 'DELETE':
-        body = request.get_json()
-        Order.query.filter_by(id = body['id']).delete()
+        try: 
+            body = request.get_json()
+            Order.query.filter_by(id = body['id']).delete()
+            db.session.commit()
+            return {'msg': 'Order deleted', 'id': body['id']}
+        except: return {'msg': "Pass"}
 
-        db.session.commit()
+    if request.method == 'PATCH':
+        try: 
+            body = request.get_json()
+            
+            order = Order.query.filter_by(id = body['id']).first()
 
-        return {'msg': 'Order deleted', 'id': body['id']}
+            order.date = body['date'],
+            order.location = body['location'],
+            order.services = body['service']
 
-    if request.method == 'PATCH': 
-        body = request.get_json()
-        
-        order = Order.query.filter_by(id = body['id']).first()
+            db.session.commit()
 
-        order.date = body['date'],
-        order.location = body['location'],
-        order.services = body['service']
-
-        db.session.commit()
-
-        return {'msg': 'Order updated'}
+            return {'msg': 'Order updated'}
+        except: return {'msg': "Pass"}
 
 
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    
     if request.method == 'GET':
-        return { 
-            'method': request.method,
-            'msg': 'Github webhook deployment works!', 
-            'env': os.environ.get('ENV_VAR', 'Cannot find variable ENV_VAR')
-        }
-
+        try: 
+            return { 
+                'method': request.method,
+                'msg': 'Github webhook deployment works!', 
+                'env': os.environ.get('ENV_VAR', 'Cannot find variable ENV_VAR')
+            }
+        except: return {'msg': "Pass"}
     if request.method == 'POST':
-        
-        body = request.get_json()
+        try: 
+            body = request.get_json()
 
-        return {
-            'msg': 'You POSTed something',
-            'request_body': body
-        }
+            return {
+                'msg': 'You POSTed something',
+                'request_body': body
+            }
+        except: return {'msg': "Pass"}
+
+
 
 @app.route("/users/login", methods=['POST'])
 def users():
+    
     if request.method == 'POST':
-        body = request.get_json()
-        users = requests.post('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/users/login', json = {'email': body['email'], 'password': body['password']})
-        print(users.json())
-        return users.json()
+        try:
+            body = request.get_json()
+            users = requests.post('https://wom22-projekt2-kanjikar-fallstrs.azurewebsites.net/users/login', json = {'email': body['email'], 'password': body['password']})
+            print(users.json())
+            return users.json()
+        except: return {'msg': "Pass"}
 
 # @app.route("/users", methods=['GET', 'POST'])
 # def users():
